@@ -1,0 +1,21 @@
+/* Hide Button */
+#ss-connect-dialog{
+  display: none !important;
+}
+
+@keyframes expand {
+  from {
+    transform: scale(.5);
+  }
+}
+
+/* Custom */
+.cleave-overlay{
+  z-index:999;
+  color: black;
+}
+
+.staticParent{
+  position: static;
+}
+
