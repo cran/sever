@@ -4,7 +4,7 @@
 #'
 #' @importFrom shiny tags singleton tagList
 #'
-#' @return \code{shiny::tags} containing the necessary dependencies.
+#' @return [shiny::tags] containing the necessary dependencies.
 #' 
 #' @name dependencies
 #' @export
@@ -13,6 +13,7 @@ use_sever <- function(){
     tags$head(
       tags$link(href = "sever-assets/style.css", rel = "stylesheet"),
       tags$script(src = "sever-assets/sever.js"),
+      tags$script(src = "sever-assets/rupture.js"),
       tags$script(src = "sever-assets/cleave.js")
     )
   )

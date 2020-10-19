@@ -112,6 +112,7 @@ function cleave(id, html, color, bg_color, duration, center_vertical, center_hor
   overlay.appendChild(overlay_content);
 
   // append overlay to dom
+  dom.innerHTML = '';
   dom.appendChild(overlay);
   
 }
@@ -120,21 +121,88 @@ Shiny.addCustomMessageHandler('cleave-it', function(opts) {
 
   $(document).on('shiny:error', function(event) {
 
+    if(!opts.silent_errors && event.error.type != null)
+      return;
+
+    event.preventDefault();
+
     if(opts.html == null)
       opts.html = '<span>' + event.error.message + '</span>';
 
     if(opts.bg_color == null)
       opts.bg_color = 'rgba(0,0,0,0)';
 
+    // apply to all 
+    if(opts.ids == null){
+
+      cleave(event.name, opts.html, opts.color, opts.bg_color, opts.duration, opts.center_vertical, opts.center_horizontal)
+    
+    } else { // apply to relevant ids) => {
+      opts.ids.forEach((value, index) => {
+
+        if(value == event.name){
+          cleave(event.name, opts.html, opts.color, opts.bg_color, opts.duration, opts.center_vertical, opts.center_horizontal)
+        }
+      });
+    }
+  });
+
+  $(document).on('shiny:value shiny:outputinvalidated', function(event){
+    if(opts.ids == null){
+      $('.cleave-overlay').remove();
+    } else { // apply to relevant ids) => {
+      opts.ids.forEach((value, index) => {
+        if(value == event.name){
+          let selector = '#' + event.name + '>.cleave-overlay';
+          $(selector).remove();
+        }
+      });
+    }
+  });
+
+});
+
+
+// chisel
+Shiny.addCustomMessageHandler('chisel-it', function(opts) {
+
+  $(document).on('shiny:error', function(event) {
+    console.log(event);
+
+    if(event.error.type == null)
+      return;
+
     event.preventDefault();
+
+    if(opts.html == null)
+      opts.html = '<span>' + event.error.message + '</span>';
+
+    if(opts.bg_color == null)
+      opts.bg_color = 'rgba(0,0,0,0)';
 
     // apply to all 
     if(opts.ids == null){
+
       cleave(event.name, opts.html, opts.color, opts.bg_color, opts.duration, opts.center_vertical, opts.center_horizontal)
-    } else { // apply to relevant ids
+    
+    } else { // apply to relevant ids) => {
       opts.ids.forEach((value, index) => {
-        if(opts.ids == event.name){
+
+        if(value == event.name){
           cleave(event.name, opts.html, opts.color, opts.bg_color, opts.duration, opts.center_vertical, opts.center_horizontal)
+        }
+      });
+    }
+  });
+
+  $(document).on('shiny:value shiny:outputinvalidated', function(event){
+    if(opts.ids == null){
+      $('.cleave-overlay').remove();
+    } else { // apply to relevant ids) => {
+      opts.ids.forEach((value, index) => {
+        if(value == event.name){
+          let selector = '#' + event.name + '>.cleave-overlay';
+          $(selector).remove();
         }
       });
     }
